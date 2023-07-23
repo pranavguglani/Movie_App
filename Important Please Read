@@ -1,0 +1,6 @@
+Sir Honestly I have tried my best, I tried implementing dynamic pagination, I gave all my time to dynamic pagination hence that why i couldnt add comment or rating.
+Comments can easily be stored in local storage. My plan was to show comments and ratings and other details when movie details was clicked. This could have been implemented 
+very easily.
+I know was this close to cracking the pagination. I used the idea to store in array and then use display as none or inline when the required 10pages are there.
+You can see in my JS code as well that i tried.
+So kindly please look into it.
