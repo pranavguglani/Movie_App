@@ -4,6 +4,14 @@ const movie_list=document.querySelector(".movies_list");
 const pagination_list=document.querySelector(".pagination");
 let current_page=1;
 let allButtons;
+
+const savedData=localStorage.getItem("userData");
+const parseData=JSON.parse(savedData);
+if(parseData === null)
+{
+    let comments=[];
+    localStorage.setItem("userData",JSON.stringify(comments));
+}
 async function fetchMovies(searchQuery, page) {
     const url = `${baseUrl}?apikey=${apiKey}&s=${searchQuery}&page=${page}`;
     try {
@@ -37,6 +45,7 @@ function create_content_div(movie,movie_div)
     const rating_div=document.createElement("div");
 
         const select=document.createElement("select");
+        select.id=`${movie.imdbID}rating`;
         const option=document.createElement("option");
         option.value="";
         option.text="Rating";
@@ -49,18 +58,101 @@ function create_content_div(movie,movie_div)
           }
         
           rating_div.appendChild(select);
+        
+        select.addEventListener("change",(e)=>{
+            
+            
+            const value=e.target.value;
+            
+            const savedData=localStorage.getItem("userData");
+            const parseData=JSON.parse(savedData);
+            
+            if(parseData ===null)
+            {
+                parseData.push({
+    
+                    imdb : `${movie.imdbID}`,
+                    id : 1,
+                    rating : value
+                })
+            }else
+            {
+                const new_id=parseData.length+1;
+                parseData.push({
+    
+                    imdb : `${movie.imdbID}`,
+                    id : new_id,
+                    rating : value
+                })
+            }
+            localStorage.removeItem("userData");
+        localStorage.setItem("userData",JSON.stringify(parseData));
 
-    const comment_div=document.createElement("div");
 
+        })
+    
+    const comment_div=document.createElement("button");
+    comment_div.innerHTML="Comment Here";
+    comment_div.id=`${movie.imdbID}comment`;
     const comment_input=document.createElement("input");
-  
+    comment_input.type="text";
+    comment_input.value="";
+    comment_input.id=`${movie.imdbID}input`;
+
+    const comment_input_button=document.createElement("button");
+    comment_input_button.type="submit";
+    comment_input_button.id=`${movie.imdbID}button`;
+    comment_input_button.innerHTML="Add Comment";
+    comment_div.addEventListener("click",()=>{
+
+        document.getElementById(`${movie.imdbID}comment`).style.display='none';
+        review_div.appendChild(comment_input);
+        review_div.appendChild(comment_input_button);
+
+    })
+   
+    comment_input_button.addEventListener("click",()=>{
+
+        const comment=comment_input.value;
+        comment_input.remove();
+        comment_input_button.remove();
+        document.getElementById(`${movie.imdbID}comment`).style.display='inline';
+        const savedData=localStorage.getItem("userData");
+        const parseData=JSON.parse(savedData);
+        
+        if(parseData ===null)
+        {
+            parseData.push({
+
+                imdb : `${movie.imdbID}`,
+                id : 1,
+                content : comment
+            })
+        }else
+        {
+            const new_id=parseData.length+1;
+            parseData.push({
+
+                imdb : `${movie.imdbID}`,
+                id : new_id,
+                content : comment
+            })
+        }
+
+        localStorage.removeItem("userData");
+        localStorage.setItem("userData",JSON.stringify(parseData));
+
+    });
 
     review_div.appendChild(rating_div);
     review_div.appendChild(comment_div);
     const movie_details=document.createElement("div");
+  
+    movie_details.innerHTML="Movie Details";
+    
 
     title_div.innerHTML=`Title: ${movie.Title}`;
-    movie_details.innerHTML="Movie Details";
+   
 
     content_div.appendChild(title_div);
     content_div.appendChild(review_div);
@@ -70,7 +162,7 @@ function create_content_div(movie,movie_div)
 function create_movie_description_div(movie,movie_div)
 {
     const movie_description=document.createElement("div");
-    movie_div.append(movie_description);
+    
 }
 function displaymovies(movies)
 {
