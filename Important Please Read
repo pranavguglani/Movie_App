@@ -4,4 +4,5 @@ very easily.
 I know was this close to cracking the pagination. I used the idea to store in array and then use display as none or inline when the required 10pages are there.
 You can see in my JS code as well that i tried.
 Like if you click on page number it works.
+Search Function also works.
 So kindly please look into it.
